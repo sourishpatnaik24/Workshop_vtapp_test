@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourish.MC | Play</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=VT323&display=swap');
+
+:root{
+  --bg-dark:#060a12;
+  --bg-navy:#0d1b2e;
+  --panel:#111a29;
+  --panel-light:#1b2740;
+  --border-hi:#4a5c7a;
+  --border-lo:#02040a;
+  --grass:#5c8a3a;
+  --grass-dark:#3f6528;
+  --diamond:#4fd8e8;
+  --gold:#ffcc33;
+  --redstone:#e6483f;
+  --text:#dbe4f0;
+  --text-dim:#8a97ab;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{
+  font-family:'VT323', monospace;
+  font-size:20px;
+  color:var(--text);
+  min-height:100vh;
+  background:
+    linear-gradient(160deg,var(--bg-dark),var(--bg-navy) 60%,var(--bg-dark)),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 48px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 48px);
+  background-attachment:fixed;
+  padding-bottom:130px;
+}
+h1,h2,h3,.pixel-font{ font-family:'Pixelify Sans', sans-serif; }
+a{ color:inherit; }
+.topbar{ padding:24px 24px 8px; text-align:center; }
+.logo{ font-family:'Pixelify Sans'; font-size:20px; color:var(--diamond); letter-spacing:1px; }
+.logo span{ color:var(--gold); }
+.container{ max-width:820px; margin:0 auto; padding:16px 20px 40px; }
+
+.pixel-panel{
+  background:var(--panel);
+  border:4px solid var(--border-lo);
+  box-shadow:
+    inset 3px 3px 0 var(--border-hi),
+    inset -3px -3px 0 var(--border-lo),
+    0 6px 0 rgba(0,0,0,0.4);
+  padding:22px;
+  margin-bottom:22px;
+}
+.pixel-panel:last-child{ margin-bottom:0; }
+
+.pixel-btn{
+  font-family:'Pixelify Sans',sans-serif;
+  background:var(--panel-light);
+  border:3px solid var(--border-lo);
+  box-shadow: inset 2px 2px 0 var(--border-hi), inset -2px -2px 0 var(--border-lo);
+  color:var(--text);
+  padding:10px 18px;
+  cursor:pointer;
+  font-size:13px;
+}
+.pixel-btn:hover{ background:var(--grass); color:#0a0e14; }
+.pixel-btn:active{ box-shadow: inset -2px -2px 0 var(--border-hi), inset 2px 2px 0 var(--border-lo); }
+.pixel-btn:disabled{ opacity:0.5; cursor:not-allowed; }
+
+.hotbar{
+  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  display:flex; gap:8px;
+  background:rgba(6,10,18,0.9);
+  padding:8px;
+  border:4px solid var(--border-lo);
+  box-shadow: inset 2px 2px 0 var(--border-hi), inset -2px -2px 0 var(--border-lo);
+  z-index:50;
+}
+.hotbar a{
+  position:relative; width:58px; height:58px;
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  background:var(--panel-light);
+  border:3px solid var(--border-lo);
+  box-shadow: inset 2px 2px 0 var(--border-hi), inset -2px -2px 0 var(--border-lo);
+  text-decoration:none; font-size:22px; color:var(--text);
+}
+.hotbar a .slot-num{ position:absolute; top:2px; left:4px; font-family:'Pixelify Sans'; font-size:8px; color:var(--text-dim); }
+.hotbar a .slot-label{ font-family:'Pixelify Sans'; font-size:7px; margin-top:2px; }
+.hotbar a.active{ border-color:#fff; box-shadow: inset 2px 2px 0 #fff, inset -2px -2px 0 var(--border-lo); }
+.hotbar a:hover{ background:var(--grass-dark); }
+
+h1.page-title{ font-size:24px; color:#fff; text-align:center; margin-bottom:24px; letter-spacing:1px; }
+h2.game-title{ font-size:15px; color:var(--diamond); margin-bottom:6px; }
+p.game-desc{ color:var(--text-dim); font-size:17px; margin-bottom:14px; }
+
+.game-score-bar{ display:flex; justify-content:space-between; align-items:center; font-family:'Pixelify Sans'; font-size:12px; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
+.game-score-bar span.value{ color:var(--gold); }
+
+.dig-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:6px; max-width:340px; margin:0 auto 16px; }
+.dig-cell{ aspect-ratio:1; font-size:22px; padding:0; }
+
+.creeper-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; max-width:340px; margin:0 auto 16px; }
+.creeper-cell{
+  aspect-ratio:1;
+  background:var(--panel-light);
+  border:3px solid var(--border-lo);
+  box-shadow: inset 2px 2px 0 var(--border-hi), inset -2px -2px 0 var(--border-lo);
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px; cursor:pointer;
+}
+.creeper-cell.active{ background:var(--grass); }
+
+.game-controls{ text-align:center; }
+
+@media (max-width:480px){
+  .hotbar a{ width:48px; height:48px; font-size:18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">SOURISH<span>.MC</span></div>
+</div>
+
+<div class="container">
+  <h1 class="page-title">&#9935; MINI GAMES</h1>
+
+  <section class="pixel-panel">
+    <h2 class="game-title">DIAMOND DIG</h2>
+    <p class="game-desc">Mine the 25 blocks. Diamonds = 10pts, gold = 5pts, stone = 0pts.</p>
+    <div class="game-score-bar">
+      <span>SCORE: <span class="value" id="digScore">0</span></span>
+      <button class="pixel-btn" onclick="initDig()">New Game</button>
+    </div>
+    <div class="dig-grid" id="digGrid"></div>
+  </section>
+
+  <section class="pixel-panel">
+    <h2 class="game-title">CREEPER DODGE</h2>
+    <p class="game-desc">Click the creeper block before it hides. 20 seconds on the clock.</p>
+    <div class="game-score-bar">
+      <span>SCORE: <span class="value" id="creeperScore">0</span></span>
+      <span>TIME: <span class="value" id="creeperTime">20</span>s</span>
+    </div>
+    <div class="creeper-grid" id="creeperGrid"></div>
+    <div class="game-controls">
+      <button class="pixel-btn" id="startCreeperBtn" onclick="initCreeper()">Start</button>
+    </div>
+  </section>
+</div>
+
+<nav class="hotbar">
+  <a href="index.html"><span class="slot-num">1</span>&#127968;<span class="slot-label">HOME</span></a>
+  <a href="about.html"><span class="slot-num">2</span>&#128100;<span class="slot-label">ABOUT</span></a>
+  <a href="games.html"><span class="slot-num">3</span>&#127918;<span class="slot-label">GAMES</span></a>
+  <a href="movies.html"><span class="slot-num">4</span>&#127916;<span class="slot-label">MOVIES</span></a>
+  <a href="play.html" class="active"><span class="slot-num">5</span>&#9935;<span class="slot-label">PLAY</span></a>
+</nav>
+
+<script>
+/* --- Diamond Dig --- */
+let digScore = 0;
+
+function initDig(){
+  const grid = document.getElementById('digGrid');
+  grid.innerHTML = '';
+  digScore = 0;
+  document.getElementById('digScore').textContent = digScore;
+
+  const total = 25;
+  let values = [];
+  for (let i = 0; i < 3; i++) values.push('diamond');
+  for (let i = 0; i < 5; i++) values.push('gold');
+  while (values.length < total) values.push('stone');
+  values.sort(() => Math.random() - 0.5);
+
+  values.forEach((v) => {
+    const cell = document.createElement('button');
+    cell.className = 'dig-cell pixel-btn';
+    cell.textContent = String.fromCodePoint(0x2b1b);
+    cell.addEventListener('click', () => revealDig(cell, v));
+    grid.appendChild(cell);
+  });
+}
+
+function revealDig(cell, value){
+  if (cell.disabled) return;
+  cell.disabled = true;
+  if (value === 'diamond'){
+    cell.textContent = String.fromCodePoint(0x1f48e);
+    digScore += 10;
+  } else if (value === 'gold'){
+    cell.textContent = String.fromCodePoint(0x1f7e8);
+    digScore += 5;
+  } else {
+    cell.textContent = String.fromCodePoint(0x1faa8);
+  }
+  document.getElementById('digScore').textContent = digScore;
+}
+
+/* --- Creeper Dodge --- */
+let creeperScore = 0;
+let creeperTimeLeft = 20;
+let creeperTickInterval = null;
+let creeperSpawnInterval = null;
+
+function buildCreeperGrid(){
+  const grid = document.getElementById('creeperGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 16; i++){
+    const cell = document.createElement('div');
+    cell.className = 'creeper-cell';
+    cell.addEventListener('click', () => hitCreeper(cell));
+    grid.appendChild(cell);
+  }
+}
+
+function initCreeper(){
+  clearInterval(creeperTickInterval);
+  clearInterval(creeperSpawnInterval);
+  buildCreeperGrid();
+  creeperScore = 0;
+  creeperTimeLeft = 20;
+  document.getElementById('creeperScore').textContent = creeperScore;
+  document.getElementById('creeperTime').textContent = creeperTimeLeft;
+  document.getElementById('startCreeperBtn').disabled = true;
+
+  creeperTickInterval = setInterval(() => {
+    creeperTimeLeft -= 1;
+    document.getElementById('creeperTime').textContent = creeperTimeLeft;
+    if (creeperTimeLeft <= 0) endCreeper();
+  }, 1000);
+
+  creeperSpawnInterval = setInterval(spawnCreeper, 800);
+}
+
+function spawnCreeper(){
+  const cells = document.querySelectorAll('.creeper-cell');
+  cells.forEach((c) => { c.classList.remove('active'); c.textContent = ''; });
+  const idx = Math.floor(Math.random() * cells.length);
+  cells[idx].classList.add('active');
+  cells[idx].textContent = String.fromCodePoint(0x1f7e9);
+}
+
+function hitCreeper(cell){
+  if (cell.classList.contains('active')){
+    creeperScore += 1;
+    document.getElementById('creeperScore').textContent = creeperScore;
+    cell.classList.remove('active');
+    cell.textContent = String.fromCodePoint(0x1f4a5);
+    setTimeout(() => { cell.textContent = ''; }, 150);
+  }
+}
+
+function endCreeper(){
+  clearInterval(creeperTickInterval);
+  clearInterval(creeperSpawnInterval);
+  document.querySelectorAll('.creeper-cell').forEach((c) => {
+    c.classList.remove('active');
+    c.textContent = '';
+  });
+  document.getElementById('startCreeperBtn').disabled = false;
+}
+
+/* Init on load */
+window.addEventListener('DOMContentLoaded', () => {
+  initDig();
+  buildCreeperGrid();
+});
+</script>
+
+</body>
+</html>
