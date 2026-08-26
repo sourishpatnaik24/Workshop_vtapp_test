@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourish.MC | Home</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=VT323&display=swap');
+
+:root{
+  --bg-dark:#060a12;
+  --bg-navy:#0d1b2e;
+  --panel:#111a29;
+  --panel-light:#1b2740;
+  --border-hi:#4a5c7a;
+  --border-lo:#02040a;
+  --grass:#5c8a3a;
+  --grass-dark:#3f6528;
+  --diamond:#4fd8e8;
+  --gold:#ffcc33;
+  --redstone:#e6483f;
+  --purple:#a85ee6;
+  --text:#dbe4f0;
+  --text-dim:#8a97ab;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{
+  font-family:'VT323', monospace;
+  font-size:20px;
+  color:var(--text);
+  min-height:100vh;
+  background:
+    linear-gradient(160deg,var(--bg-dark),var(--bg-navy) 60%,var(--bg-dark)),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 48px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 48px);
+  background-attachment:fixed;
+  padding-bottom:130px;
+}
+h1,h2,h3,.pixel-font{ font-family:'Pixelify Sans', sans-serif; }
+a{ color:inherit; }
+.topbar{ padding:24px 24px 8px; text-align:center; }
+.logo{ font-family:'Pixelify Sans'; font-size:20px; color:var(--diamond); letter-spacing:1px; }
+.logo span{ color:var(--gold); }
+.container{ max-width:820px; margin:0 auto; padding:16px 20px 40px; }
+
+.pixel-panel{
+  background:var(--panel);
+  border:4px solid var(--border-lo);
+  box-shadow:
+    inset 3px 3px 0 var(--border-hi),
+    inset -3px -3px 0 var(--border-lo),
+    0 6px 0 rgba(0,0,0,0.4);
+  padding:24px;
+}
+
+.pixel-btn{
+  font-family:'Pixelify Sans',sans-serif;
+  background:var(--panel-light);
+  border:3px solid var(--border-lo);
+  box-shadow: inset 2px 2px 0 var(--border-hi), inset -2px -2px 0 var(--border-lo);
+  color:var(--text);
+  padding:10px 18px;
+  cursor:pointer;
+  font-size:14px;
+  letter-spacing:0.5px;
+}
+.pixel-btn:hover{ background:var(--grass); color:#0a0e14; }
+.pixel-btn:active{ box-shadow: inset -2px -2px 0 var(--border-hi), inset 2px 2px 0 var(--border-lo); }
+
+/* Hero character sheet */
+.hero{ text-align:center; margin-bottom:24px; border-color:var(--purple); }
+.rarity-tag{ font-family:'Pixelify Sans'; font-size:11px; color:var(--purple); letter-spacing:2px; margin-bottom:10px; }
+.hero h1{ font-size:34px; color:#fff; letter-spacing:2px; margin-bottom:6px; text-shadow:2px 2px 0 var(--border-lo); }
+.tagline{ color:var(--text-dim); font-size:20px; margin-bottom:20px; }
+.stat-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; }
+.stat{ background:var(--panel-light); border:2px solid var(--border-lo); box-shadow: inset 2px 2px 0 var(--border-hi), inset -2px -2px 0 var(--border-lo); padding:12px; text-align:left; }
+.stat-label{ display:block; font-family:'Pixelify Sans'; font-size:10px; color:var(--gold); letter-spacing:1px; margin-bottom:4px; }
+.stat-value{ font-size:19px; }
+
+/* Nav cards */
+.card-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+.nav-card{ text-decoration:none; display:block; transition:transform 0.1s; }
+.nav-card:hover{ transform:translateY(-4px); border-color:var(--diamond); }
+.nav-card h3{ font-size:15px; color:var(--diamond); margin-bottom:8px; }
+.nav-card p{ font-size:18px; color:var(--text-dim); }
+
+footer{ text-align:center; color:var(--text-dim); font-size:16px; margin-top:30px; }
+
+/* Hotbar nav */
+.hotbar{
+  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  display:flex; gap:8px;
+  background:rgba(6,10,18,0.9);
+  padding:8px;
+  border:4px solid var(--border-lo);
+  box-shadow: inset 2px 2px 0 var(--border-hi), inset -2px -2px 0 var(--border-lo);
+  z-index:50;
+}
+.hotbar a{
+  position:relative; width:58px; height:58px;
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  background:var(--panel-light);
+  border:3px solid var(--border-lo);
+  box-shadow: inset 2px 2px 0 var(--border-hi), inset -2px -2px 0 var(--border-lo);
+  text-decoration:none; font-size:22px; color:var(--text);
+}
+.hotbar a .slot-num{ position:absolute; top:2px; left:4px; font-family:'Pixelify Sans'; font-size:8px; color:var(--text-dim); }
+.hotbar a .slot-label{ font-family:'Pixelify Sans'; font-size:7px; margin-top:2px; }
+.hotbar a.active{ border-color:#fff; box-shadow: inset 2px 2px 0 #fff, inset -2px -2px 0 var(--border-lo); }
+.hotbar a:hover{ background:var(--grass-dark); }
+
+/* Popup */
+.popup-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.78); display:flex; align-items:center; justify-content:center; z-index:200; padding:20px; }
+.popup-panel{ max-width:420px; text-align:center; border-color:var(--gold); }
+.popup-panel h2{ color:var(--gold); font-size:16px; margin-bottom:14px; letter-spacing:1px; }
+.popup-panel p{ font-size:20px; line-height:1.5; margin-bottom:18px; }
+.hidden{ display:none !important; }
+
+@media (max-width:480px){
+  .hero h1{ font-size:26px; }
+  .hotbar a{ width:48px; height:48px; font-size:18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="popup-overlay" id="popupOverlay">
+  <div class="pixel-panel popup-panel">
+    <h2>&#9935; WORKSHOP BUILD</h2>
+    <p>This portfolio was crafted live in a workshop hosted for <strong>VTAPP 2026</strong>.</p>
+    <button class="pixel-btn" onclick="document.getElementById('popupOverlay').classList.add('hidden')">Got it &#10003;</button>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="logo">SOURISH<span>.MC</span></div>
+</div>
+
+<div class="container">
+  <section class="pixel-panel hero">
+    <div class="rarity-tag">&#9733; LEGENDARY CHARACTER &#9733;</div>
+    <h1>SOURISH</h1>
+    <p class="tagline">Computer Science (Core) &middot; VIT-AP University</p>
+    <div class="stat-row">
+      <div class="stat"><span class="stat-label">CLASS</span><span class="stat-value">CS Core Student</span></div>
+      <div class="stat"><span class="stat-label">GUILD</span><span class="stat-value">VIT-AP University</span></div>
+      <div class="stat"><span class="stat-label">HOBBY</span><span class="stat-value">Football &#9917;</span></div>
+    </div>
+  </section>
+
+  <div class="card-grid">
+    <a class="pixel-panel nav-card" href="games.html">
+      <h3>&#127918; GAMES</h3>
+      <p>The titles I keep grinding</p>
+    </a>
+    <a class="pixel-panel nav-card" href="movies.html">
+      <h3>&#127916; MOVIES</h3>
+      <p>Films on repeat watch</p>
+    </a>
+    <a class="pixel-panel nav-card" href="play.html">
+      <h3>&#9935; MINI GAMES</h3>
+      <p>Dig in and play a round</p>
+    </a>
+  </div>
+
+  <footer>Use the hotbar below to explore &middot; crafted for VTAPP 2026</footer>
+</div>
+
+<nav class="hotbar">
+  <a href="index.html" class="active"><span class="slot-num">1</span>&#127968;<span class="slot-label">HOME</span></a>
+  <a href="about.html"><span class="slot-num">2</span>&#128100;<span class="slot-label">ABOUT</span></a>
+  <a href="games.html"><span class="slot-num">3</span>&#127918;<span class="slot-label">GAMES</span></a>
+  <a href="movies.html"><span class="slot-num">4</span>&#127916;<span class="slot-label">MOVIES</span></a>
+  <a href="play.html"><span class="slot-num">5</span>&#9935;<span class="slot-label">PLAY</span></a>
+</nav>
+
+</body>
+</html>
